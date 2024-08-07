@@ -6,7 +6,7 @@ class TopickControllers{
 
         $db = $database->getConnection();
 
-        $query = 'SELECT * FROM topics';
+        $query = 'SELECT user_id, topic_name, id, count(id) as count_topic FROM topics GROUP BY id';
             $stmt = $db->prepare($query);
             $stmt->execute();
             if($stmt->rowCount() > 0)
@@ -14,15 +14,18 @@ class TopickControllers{
                 while ($row = $stmt->fetch(PDO::FETCH_LAZY))
                 {
                     $res[] = [
-                        'topic_name'=>$row->name,
+                        'topic_name'=>$row->topic_name,
                         'id'=>$row->id,
                     ];
-                }                    
+                }     
             }else{
-                http_response_code(404);
-                return false;
+                
+                $res[] = [
+                    'noTopic'=>'Тем нет',
+                ];
             }
         return $res;
     }
+    
 }
 ?>
