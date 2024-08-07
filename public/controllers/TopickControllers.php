@@ -6,7 +6,7 @@ class TopickControllers{
 
         $db = $database->getConnection();
 
-        $query = 'SELECT * FROM users';
+        $query = 'SELECT * FROM topics';
             $stmt = $db->prepare($query);
             $stmt->execute();
             if($stmt->rowCount() > 0)
@@ -14,8 +14,8 @@ class TopickControllers{
                 while ($row = $stmt->fetch(PDO::FETCH_LAZY))
                 {
                     $res[] = [
-                        'name'=>$row->name,
-                        'status'=>$row->status,
+                        'topic_name'=>$row->name,
+                        'id'=>$row->id,
                     ];
                 }                    
             }else{

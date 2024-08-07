@@ -1,0 +1,18 @@
+body {
+    background-color: bisque;
+    font-size: medium;
+    color: black;
+}
+
+.topic {
+    border: 1px solid gray;
+}
+
+.topic-author {
+    font-size: small;
+    color: grey;
+}
+
+.topic a{
+    color: brown;
+}

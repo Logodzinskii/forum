@@ -3,10 +3,10 @@
 ?>
 <body>
    <?
-    $users = new UsersControllers();
-    foreach($users->getUsers() as $user)
+    $topic = new TopickControllers();
+    foreach($topic->getTopic() as $topic)
     {
-        echo $user['name'];
+        echo $topic['topic_name'];
     };         
    ?>
 </body>
