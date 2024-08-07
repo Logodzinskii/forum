@@ -8,7 +8,7 @@ class UsersControllers {
 
         $db = $database->getConnection();
 
-        $query = 'SELECT * FROM users';
+        $query = 'SELECT * FROM topic';
             $stmt = $db->prepare($query);
             $stmt->execute();
             if($stmt->rowCount() > 0)
