@@ -2,30 +2,38 @@
 class TopickControllers{
 
     public function getTopic() : array {
+
         $database = Database::get_instance();
 
         $db = $database->getConnection();
+        
+        $topic = [];
+        
+        
+        $db->beginTransaction();
 
-        $query = 'SELECT user_id, topic_name, id, count(id) as count_topic FROM topics GROUP BY id';
+            $query = 'SELECT topic_name, id FROM topics';
             $stmt = $db->prepare($query);
             $stmt->execute();
             if($stmt->rowCount() > 0)
             {
                 while ($row = $stmt->fetch(PDO::FETCH_LAZY))
                 {
-                    $res[] = [
+                    $topic[] = [
                         'topic_name'=>$row->topic_name,
                         'id'=>$row->id,
                     ];
                 }     
             }else{
                 
-                $res[] = [
+                $topic[] = [
                     'noTopic'=>'Тем нет',
                 ];
-            }
-        return $res;
+            }           
+            
+            return $topic;
+        
     }
-    
+
 }
 ?>
