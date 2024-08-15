@@ -1,6 +1,7 @@
 <? 
     include '../layouts/header.php';
 ?>
+<main>
 <form action="/action/createTopic.php" method="post">
     <div class="form-card">
         <div class="card-title">
@@ -15,9 +16,10 @@
             <input type="text" name="user_name"  placeholder="имя пользователя" />
             <input type="text" name="user_email" placeholder="email пользователя" />
         </div>
-    <button type="submit">Создать тему</button>
+    <button type="submit" class="big-button page">Создать тему</button>
     </div>
 </form>
+</main>
 <?
     include '../layouts/footer.php'
 ?>
