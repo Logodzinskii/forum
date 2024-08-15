@@ -266,3 +266,8 @@ textarea {
     margin: 8px 0;
     box-sizing: border-box;
   }
+
+  .error{
+    color: red;
+    padding: 10px;
+  }

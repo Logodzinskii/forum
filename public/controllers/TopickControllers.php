@@ -1,5 +1,6 @@
 <?
 
+
 class TopickControllers{
 
     public $db;
@@ -14,6 +15,10 @@ class TopickControllers{
         $this->curentPage = isset($_GET['page'])?$_GET['page'] : 1;
     }
 
+    /**
+     * Получим все темы форума
+     * @return array
+     */
     public function getTopic() : array {
         
         $countTopic = '';
@@ -64,6 +69,12 @@ class TopickControllers{
         $pagination = $pagination->pagination();
         return ['topic'=>$topic, 'pages'=>$pagination];
     }
+
+    /**
+     * Получим все сообщения по id темы
+     * @param id
+     * @return array
+     */
 
     public function getTopicMessage($id) : array {    
     $topic = [];
@@ -128,17 +139,26 @@ class TopickControllers{
         return ['topic'=>$topic, 'pages'=>$pagination];
     }
 
+    /**
+     * создание темы
+     * @param $post
+     * @return string
+     */
+
     public function createTopic($post) : string {
+
+        $validator = new ValidatorController();
 
         /**
          * Добавим пользователя в базу данных Users и получим его id
          */
-        $userName = $post['user_name'];
-        $userEmail = $post['user_email'];
+
+        $userName = $validator->validateText($post['user_name']);
+        $userEmail = $validator->validateEmail($post['user_email']);
         $userStatus = 'user';
 
-        $topicName = $post['topic_name'];
-        $topicDescryption = $post['topic_descryption'];
+        $topicName = $validator->validateText($post['topic_name']);
+        $topicDescryption = $validator->validateText($post['topic_descryption']);
 
         $createdAt = new \DateTime('now');
         $createdAt = $createdAt->format('Y-m-d:h:i:s');
@@ -194,14 +214,22 @@ class TopickControllers{
 
     }
 
+    /**
+     * создание сообщения
+     * @param $post
+     * @return array
+     */
+
     public function createMessage($post) : string {
 
-        $userName = $post['user_name'];
-        $userEmail = $post['user_email'];
+        $validator = new ValidatorController();
+
+        $userName = $validator->validateText($post['user_name']);
+        $userEmail = $validator->validateEmail($post['user_email']);
         $userStatus = 'user';
 
-        $topicId = $post['topic_id'];
-        $userMessage = $post['user_message'];
+        $topicId = $validator->validateId($post['topic_id']);
+        $userMessage = $validator->validateText($post['user_message']);
 
         $createdAt = new \DateTime('now');
         $createdAt = $createdAt->format('Y-m-d:h:i:s');
