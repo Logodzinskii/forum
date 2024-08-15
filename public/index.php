@@ -39,7 +39,7 @@
                         };
                         foreach($theme['topic'] as $top){
                         
-                            echo '<a href="components/form_message.php?topic_id='.$top['topic_id'].'" class="a-button">Создать сообщение!</a> ';
+                            echo '<div class="big-button pages page"><a href="components/form_message.php?topic_id='.$top['topic_id'].'" class="a-button">Создать сообщение!</a></div>';
                             break;
                         }
                         
@@ -50,11 +50,19 @@
                     if( !isset($topic['noTopic']) ){
 
                         echo '<div class="topic">';
-                        echo '<div class="topic-name"><a href="/?topic='.$topic['topic_id'].'">'.$topic['topic_name'].'</a></div>';
-                        echo '<div class="topic-author">'.$topic['user_name'].'</div>';
-                        echo '<div class="inner-topic-message-count">'.$topic['count_message'].'</div>';
-                        echo '<div class="last-author">Последнее сообщение от автора - '. $topic['last_user_name'] .'</div>';
-                        echo '<div class="last-author-date">Последнее сообщение создано - '. $topic['messages_created_at'] .'</div>';
+                        echo '<div class="topic-name">
+                                <a href="/?topic='.$topic['topic_id'].'">'.$topic['topic_name'].'</a>
+                                <div class="inner-topic-message-count"> '.$topic['count_message'].' шт.</div>
+                            </div>';
+                        echo '<div class="topic-author"> тему создал - '.$topic['user_name'].'</div>';
+
+                        if(isset($topic['last_user_name'])){
+                            echo '<div class="last-author">Последнее сообщение от автора - '. $topic['last_user_name'] .'</div>';
+                            echo '<div class="last-author-date">Последнее сообщение создано - '. $topic['messages_created_at'] .'</div>';
+    
+                        }else{
+                            echo '<div class="last-author">Сообщений еще нет</div>';
+                        }
                         echo '</div>';
                         
                     }else{
@@ -64,7 +72,7 @@
                     }
                     
                 }; 
-                echo '<a href="components/form_topic.php" class="a-button">Создать тему</a><br/>';
+                echo '<div class="big-button pages page"><a href="components/form_topic.php">Создать тему</a></div>';
                 
             }
         
