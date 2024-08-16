@@ -8,6 +8,8 @@ body {
     font-size: medium;
     color: black;
     font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
 }
 header{
     width: 100vw;
@@ -36,7 +38,6 @@ footer{
 }
 
 .topic {
-    
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;

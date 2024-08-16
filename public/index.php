@@ -17,6 +17,10 @@
                 $theme = $topics->getTopicMessage($_GET['topic']);
                 foreach($theme['topic'] as $top){
                     echo '<div class="topic"> Название темы - '.$top['topic_name'].'</div>';
+                    if(isset($top['topic_descryption'])){
+                        echo '<div class="topic"> Описание темы - '.$top['topic_descryption'].'</div>';
+                    }
+                    
                     break;
                 } 
 
