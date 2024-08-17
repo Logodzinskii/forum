@@ -15,7 +15,7 @@ class PaginatorControllers {
     }
 
     public function pagination() : array{        
-        
+      
         $pages = ['back'=>$this->backPage,
                     'next'=>$this->nextPage,
                     'pages'=> $this->pages,
@@ -23,7 +23,7 @@ class PaginatorControllers {
                     'lastPage'=>$this->lastPage,
                     'link'=>$this->link,
         ];
-
+        
         return $pages;
 
     }
@@ -31,7 +31,10 @@ class PaginatorControllers {
      * Получим общее количество записей в базе данных и пересчитаем в количество страниц
      */
     public function setCount($count) : void{
-
+        
+        if(empty($count)){
+            $count = 1;
+        }
         $arr = [];
         
         $countPages = ($count/$this->limit)>1 ? $count/$this->limit : 1;

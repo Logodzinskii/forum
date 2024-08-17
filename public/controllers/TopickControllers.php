@@ -7,11 +7,17 @@ class TopickControllers{
 
     public function __construct()
     {
-        $database = Database::get_instance();
+        try {
+            $database = Database::get_instance();
 
-        $this->db = $database->getConnection();
-        $this->limit = 10;
-        $this->curentPage = isset($_GET['page'])?$_GET['page'] : 1;
+            $this->db = $database->getConnection();
+            $this->limit = 10;
+            $this->curentPage = isset($_GET['page'])?$_GET['page'] : 1;
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+        
     }
 
     /**
@@ -23,8 +29,9 @@ class TopickControllers{
         $countTopic = '';
         $topic = [];
         $link = '/';
-        $pagination = new PaginatorControllers($this->curentPage, $this->limit, $link);
-        
+        try{
+
+            $pagination = new PaginatorControllers($this->curentPage, $this->limit, $link);        
         
             $query = 'SELECT topics.id, topics.topic_name, topics.topic_descryption, topics.user_id, users.user_name, users.created_at, count(*) as count_message, 
                                               (SELECT user_id FROM messages WHERE topic_id = topics.id order by created_at DESC limit 1 ) as id_last_user,
@@ -67,7 +74,13 @@ class TopickControllers{
             }
 
         $pagination = $pagination->pagination();
+
         return ['topic'=>$topic, 'pages'=>$pagination];
+
+        }catch(PDOException $e){
+            echo $e->getMessage();
+        }
+        
     }
 
     /**
@@ -194,9 +207,6 @@ class TopickControllers{
             return 'Тема успешно создана';    
 
         }catch(PDOException $e){
-
-            $this->db->rollback();
-
             return $e->getMessage();
         }
 

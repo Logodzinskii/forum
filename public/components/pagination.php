@@ -1,5 +1,4 @@
 <?
-    
     echo '<div class="container-pages"><div class="pages">';
     echo '<a href="?page='.$pages['pages']['firstPage'].'&'.$pages['pages']['link'].'" class="page">к первой</a>';
     echo '<a href="?page='.$pages['pages']['back'].'&'.$pages['pages']['link'].'" class="page"><</a>';
@@ -9,4 +8,6 @@
     echo '<a href="?page='.$pages['pages']['next'].'&'.$pages['pages']['link'].'" class="page">></a>';    
     echo '<a href="?page='.$pages['pages']['lastPage'].'&'.$pages['pages']['link'].'" class="page">к последней</a>';
     echo '</div></div>';
+
+    
 ?>
