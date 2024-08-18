@@ -17,7 +17,8 @@ class UsersControllers {
 
     public function getUsers() : array {
 
-        $query = 'SELECT * FROM users';
+        try{
+            $query = 'SELECT * FROM users';
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             if($stmt->rowCount() > 0)
@@ -33,7 +34,13 @@ class UsersControllers {
                 http_response_code(404);
                 return false;
             }
-        return $res;      
+        return $res; 
+        }catch(PDOException $e){
+            $log = new FileLogWriter();
+            $processor = new LoggerController($log, $e->getMessage());
+            $processor->write();
+        }
+             
     }
     /**
      * Перед добавлением пользователя функция проверяет по email есть ли он в базе.
@@ -50,42 +57,47 @@ class UsersControllers {
         /**
         * Проверим есть ли пользователь в базе данных по email
         */
-
-        $param = [
-            'user_email'=> $userEmail  ,
-        ];
-        $query = 'SELECT id FROM users WHERE user_email=:user_email';
-        $stmt = $this->db->prepare($query);
-        $stmt->execute($param);
-        if($stmt->rowCount() > 0)
-        {
-            while ($row = $stmt->fetch(PDO::FETCH_LAZY))
-                {
-
-                    $idUser = $row->id;
-                            
-                }
-        }else{
-            $sth = $this->db->prepare("INSERT INTO `users` SET 
-                `user_name`     = :user_name, 
-                `user_email`    = :user_email,
-                `user_status`   = :user_status,
-                `created_at`    = :created_at,
-                `updated_at`    = :updated_at
-                ");
-            $sth->execute([
-                'user_name'     => $userName,
-                'user_email'    => $userEmail,
-                'user_status'   => $userStatus,
-                'created_at'    => $createdAt,
-                'updated_at'    => $createdAt,
-            ]);  
-
-            $idUser =  $this->db->lastInsertId();
+        try{
+            $param = [
+                'user_email'=> $userEmail  ,
+            ];
+            $query = 'SELECT id FROM users WHERE user_email=:user_email';
+            $stmt = $this->db->prepare($query);
+            $stmt->execute($param);
+            if($stmt->rowCount() > 0)
+            {
+                while ($row = $stmt->fetch(PDO::FETCH_LAZY))
+                    {
+    
+                        $idUser = $row->id;
+                                
+                    }
+            }else{
+                $sth = $this->db->prepare("INSERT INTO `users` SET 
+                    `user_name`     = :user_name, 
+                    `user_email`    = :user_email,
+                    `user_status`   = :user_status,
+                    `created_at`    = :created_at,
+                    `updated_at`    = :updated_at
+                    ");
+                $sth->execute([
+                    'user_name'     => $userName,
+                    'user_email'    => $userEmail,
+                    'user_status'   => $userStatus,
+                    'created_at'    => $createdAt,
+                    'updated_at'    => $createdAt,
+                ]);  
+    
+                $idUser =  $this->db->lastInsertId();
+            }
+    
+            return $idUser;
+        }catch(Exception $e){
+            $log = new FileLogWriter();
+            $processor = new LoggerController($log, $e->getMessage());
+            $processor->write();
         }
-
-        return $idUser;
-
+        
     }
 
 }

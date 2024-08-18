@@ -312,3 +312,20 @@ textarea {
     color: red;
     padding: 10px;
   }
+
+  .ico {
+    margin: 10px;
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+ 
+  .email {
+    background-image: url('../image/envelope-at.svg');
+  }
+
+  .telegram {
+    background-image: url('../image/send.svg');
+  }

@@ -1,0 +1,7 @@
+
+2024-08-17 05:47:02-
+2024-08-17 05:47:02-
+2024-08-18 01:42:50-SQLSTATE[42S22]: Column not found: 1054 Unknown column 'topics2.id' in 'field list'
+2024-08-18 01:42:51-SQLSTATE[42S22]: Column not found: 1054 Unknown column 'topics2.id' in 'field list'
+2024-08-18 01:43:34-SQLSTATE[42S22]: Column not found: 1054 Unknown column 'topics2.id' in 'field list'
+2024-08-18 01:43:34-SQLSTATE[42S22]: Column not found: 1054 Unknown column 'topics2.id' in 'field list'

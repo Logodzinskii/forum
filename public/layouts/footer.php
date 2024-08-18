@@ -16,8 +16,10 @@
         ?></li>
     </ul>
     <p>
-        <p>Тестовое задание выполнил <a href="mailto:alexanderlogodzinsky@yandex.ru">Логодзинский А.С.</a></p>
-        <p>Телеграм: <a href="https://t.me/ekasaitlim">@ekasaitlim</a></p>
+        <p>
+            <div class="ico email"></div> <a href="mailto:alexanderlogodzinsky@yandex.ru">Логодзинский А.С.</a>
+            <div class="ico telegram"></div> <a href="https://t.me/ekasaitlim">@ekasaitlim</a>
+        </p>
     </p>
 </footer>
 </html>

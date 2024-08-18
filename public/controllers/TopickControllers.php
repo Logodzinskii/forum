@@ -1,23 +1,19 @@
 <?
 
-class TopickControllers{
+class TopickControllers {
 
     public $db;
     public $limit, $curentPage;
+    public $error;
 
     public function __construct()
     {
-        try {
-            $database = Database::get_instance();
-
-            $this->db = $database->getConnection();
-            $this->limit = 10;
-            $this->curentPage = isset($_GET['page'])?$_GET['page'] : 1;
-
-        }catch(PDOException $e){
-            echo $e->getMessage();
-        }
-        
+    
+        $database = Database::get_instance();
+        $this->db = $database->getConnection();
+        $this->limit = 10;
+        $this->curentPage = isset($_GET['page'])?$_GET['page'] : 1;
+                    
     }
 
     /**
@@ -78,7 +74,9 @@ class TopickControllers{
         return ['topic'=>$topic, 'pages'=>$pagination];
 
         }catch(PDOException $e){
-            echo $e->getMessage();
+            $log = new FileLogWriter();
+            $processor = new LoggerController($log, $e->getMessage());
+            $processor->write();
         }
         
     }
@@ -96,68 +94,74 @@ class TopickControllers{
     $topic = [];
     
     $link = 'topic='.$id;
-        
-    $pagination = new PaginatorControllers($this->curentPage, $this->limit, $link);
+        try {
+            $pagination = new PaginatorControllers($this->curentPage, $this->limit, $link);
 
-        $query = 'SELECT messages.id,
-         messages.user_message,
-          messages.user_id,
-           messages.created_at as created_at,
+            $query = 'SELECT messages.id,
+            messages.user_message,
+            messages.user_id,
+            messages.created_at as created_at,
             topics.topic_name as topic_name,
-             topics.topic_descryption,
-              topics.id as topic_id,
-               users.user_name as user_name, 
-                           (SELECT COUNT(*) FROM messages WHERE topic_id = "'.$id.'") as count_topic
-                           FROM messages
-                           LEFT JOIN users ON users.id = messages.user_id
-                           LEFT JOIN topics ON topics.id = messages.topic_id
-                           WHERE topic_id = "'.$id.'"
-                           GROUP BY messages.id
-                           LIMIT '.$this->limit.'
-                           OFFSET '.$pagination->getOffset().'';
-            
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        if($stmt->rowCount() > 0)
-        {
-            while ($row = $stmt->fetch(PDO::FETCH_LAZY))
-            {
-                $topic[] = [
-                    'topic_id'=>$row->topic_id,
-                    'topic_name'=>$row->topic_name,
-                    'topic_descryption'=>$row->topic_descryption,
-                    'message_name'=>$row->user_message,
-                    'user_name'=>$row->user_name,
-                    'messages_created_at'=>$row->created_at,
-                ];
+            topics.topic_descryption,
+            topics.id as topic_id,
+            users.user_name as user_name, 
+                            (SELECT COUNT(*) FROM messages WHERE topic_id = "'.$id.'") as count_topic
+                            FROM messages
+                            LEFT JOIN users ON users.id = messages.user_id
+                            LEFT JOIN topics ON topics.id = messages.topic_id
+                            WHERE topic_id = "'.$id.'"
+                            GROUP BY messages.id
+                            LIMIT '.$this->limit.'
+                            OFFSET '.$pagination->getOffset().'';
                 
-                $countTopic = $row->count_topic;
-                
-            }  
-            
-            $pagination->setCount($countTopic); 
-            
-        }else{
-
-            $query = 'SELECT id, topic_name  FROM topics 
-                           WHERE id = "'.$id.'"';
-                           
             $stmt = $this->db->prepare($query);
             $stmt->execute();
-            $pagination->setCount($countTopic);
-        if($stmt->rowCount() > 0)
-        while ($row = $stmt->fetch(PDO::FETCH_LAZY))
+            if($stmt->rowCount() > 0)
             {
-                $topic[] = [
-                    'topic_id'=>$row->id,
-                    'topic_name'=>$row->topic_name,
-                    'noTopic'=>'Сообщений нет<br/>',
-                ];
-            }
-        }           
-  
-        $pagination = $pagination->pagination();
-        return ['topic'=>$topic, 'pages'=>$pagination];
+                while ($row = $stmt->fetch(PDO::FETCH_LAZY))
+                {
+                    $topic[] = [
+                        'topic_id'=>$row->topic_id,
+                        'topic_name'=>$row->topic_name,
+                        'topic_descryption'=>$row->topic_descryption,
+                        'message_name'=>$row->user_message,
+                        'user_name'=>$row->user_name,
+                        'messages_created_at'=>$row->created_at,
+                    ];
+                    
+                    $countTopic = $row->count_topic;
+                    
+                }  
+                
+                $pagination->setCount($countTopic); 
+                
+            }else{
+
+                $query = 'SELECT id, topic_name  FROM topics 
+                            WHERE id = "'.$id.'"';
+                            
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+                $pagination->setCount($countTopic);
+            if($stmt->rowCount() > 0)
+            while ($row = $stmt->fetch(PDO::FETCH_LAZY))
+                {
+                    $topic[] = [
+                        'topic_id'=>$row->id,
+                        'topic_name'=>$row->topic_name,
+                        'noTopic'=>'Сообщений нет<br/>',
+                    ];
+                }
+            }           
+    
+            $pagination = $pagination->pagination();
+            return ['topic'=>$topic, 'pages'=>$pagination];
+        }catch(PDOException $e){
+            $log = new FileLogWriter();
+            $processor = new LoggerController($log, $e->getMessage());
+            $processor->write();
+        }
+    
     }
 
     /**
@@ -207,7 +211,9 @@ class TopickControllers{
             return 'Тема успешно создана';    
 
         }catch(PDOException $e){
-            return $e->getMessage();
+            $log = new FileLogWriter();
+            $processor = new LoggerController($log, $e->getMessage());
+            $processor->write();
         }
 
     }
@@ -263,7 +269,9 @@ class TopickControllers{
 
             $this->db->rollback();
 
-            return $e->getMessage();
+            $log = new FileLogWriter();
+            $processor = new LoggerController($log, $e->getMessage());
+            $processor->write();
         }
 
     }

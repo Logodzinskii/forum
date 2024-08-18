@@ -8,6 +8,5 @@
     echo '<a href="?page='.$pages['pages']['next'].'&'.$pages['pages']['link'].'" class="page">></a>';    
     echo '<a href="?page='.$pages['pages']['lastPage'].'&'.$pages['pages']['link'].'" class="page">к последней</a>';
     echo '</div></div>';
-
     
 ?>
